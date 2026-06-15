@@ -265,7 +265,8 @@ static string GetDuration(JsonElement element)
 
 static object WithRequestId(string? requestId, object payload)
 {
-  var json = JsonSerializer.SerializeToElement(payload);
+  var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+  var json = JsonSerializer.SerializeToElement(payload, options);
   using var doc = JsonDocument.Parse(json.GetRawText());
   var map = new Dictionary<string, object?> { ["requestId"] = requestId };
   foreach (var prop in doc.RootElement.EnumerateObject())
@@ -467,7 +468,8 @@ static string? ReadMessage(Stream stream)
 
 static void WriteResponse(Stream stream, object syncRoot, object payload)
 {
-  var json = JsonSerializer.Serialize(payload);
+  var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+  var json = JsonSerializer.Serialize(payload, options);
   var bytes = Encoding.UTF8.GetBytes(json);
   var lengthBytes = BitConverter.GetBytes(bytes.Length);
   lock (syncRoot)
