@@ -17,11 +17,12 @@ while (true)
     break;
   }
 
+  string? requestId = null;
   try
   {
     var root = JsonDocument.Parse(message).RootElement;
     var action = root.GetProperty("action").GetString() ?? "";
-    var requestId = root.TryGetProperty("requestId", out var requestIdProp) ? requestIdProp.GetString() : null;
+    requestId = root.TryGetProperty("requestId", out var requestIdProp) ? requestIdProp.GetString() : null;
 
     switch (action)
     {
@@ -44,7 +45,7 @@ while (true)
   }
   catch (Exception ex)
   {
-    WriteResponse(output, outputLock, new { ok = false, error = ex.Message });
+    WriteResponse(output, outputLock, WithRequestId(requestId, new { ok = false, error = ex.Message }));
   }
 }
 
@@ -430,6 +431,12 @@ static string ResolveYtDlpPath()
   if (!string.IsNullOrWhiteSpace(envPath) && File.Exists(envPath))
   {
     return envPath;
+  }
+
+  var localPath = Path.Combine(AppContext.BaseDirectory, "yt-dlp.exe");
+  if (File.Exists(localPath))
+  {
+    return localPath;
   }
 
   return "yt-dlp";
