@@ -1,8 +1,14 @@
 const defaultDownloadDir = "C:\\download";
 const downloadDirStorageKey = "ytDlpDownloadDir";
+const downloadSubsStorageKey = "ytDlpDownloadSubs";
+const subLangsStorageKey = "ytDlpSubLangs";
+const embedSubsStorageKey = "ytDlpEmbedSubs";
 
 const urlInput = document.getElementById("url");
 const downloadDirInput = document.getElementById("downloadDir");
+const downloadSubsInput = document.getElementById("downloadSubs");
+const subLangsInput = document.getElementById("subLangs");
+const embedSubsInput = document.getElementById("embedSubs");
 const qualityInput = document.getElementById("quality");
 const statusText = document.getElementById("status");
 const resolveButton = document.getElementById("resolve");
@@ -203,6 +209,9 @@ async function downloadSelectedVideos() {
   }
 
   localStorage.setItem(downloadDirStorageKey, downloadDir);
+  localStorage.setItem(downloadSubsStorageKey, downloadSubsInput.checked);
+  localStorage.setItem(subLangsStorageKey, subLangsInput.value);
+  localStorage.setItem(embedSubsStorageKey, embedSubsInput.checked);
   downloadSelectedButton.disabled = true;
   setStatus(`正在加入 ${selected.length} 個下載任務...`, "busy");
 
@@ -215,7 +224,10 @@ async function downloadSelectedVideos() {
         url: video.url,
         downloadDir,
         quality: qualityInput.value,
-        playlistMode: "single"
+        playlistMode: "single",
+        downloadSubs: downloadSubsInput.checked,
+        subLangs: subLangsInput.value,
+        embedSubs: embedSubsInput.checked
       });
       successCount += 1;
     } catch (error) {
@@ -509,6 +521,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const savedDir = localStorage.getItem(downloadDirStorageKey);
   downloadDirInput.value = savedDir || defaultDownloadDir;
+  downloadSubsInput.checked = localStorage.getItem(downloadSubsStorageKey) === "true";
+  subLangsInput.value = localStorage.getItem(subLangsStorageKey) || "zh-TW,en";
+  embedSubsInput.checked = localStorage.getItem(embedSubsStorageKey) === "true";
 
   if (previewMode) {
     urlInput.value = "https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=PLdemo";

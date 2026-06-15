@@ -63,6 +63,10 @@ static object StartDownload(JsonElement root, ConcurrentDictionary<string, Downl
   var downloadDir = root.TryGetProperty("downloadDir", out var dirProp) ? dirProp.GetString() : null;
   var playlistMode = root.TryGetProperty("playlistMode", out var playlistProp) ? playlistProp.GetString() : "single";
   var quality = root.TryGetProperty("quality", out var qualityProp) ? qualityProp.GetString() : "best-mp4";
+  var downloadSubs = root.TryGetProperty("downloadSubs", out var dsProp) && dsProp.GetBoolean();
+  var subLangs = root.TryGetProperty("subLangs", out var slProp) ? slProp.GetString() : "zh-TW,en";
+  var embedSubs = root.TryGetProperty("embedSubs", out var esProp) && esProp.GetBoolean();
+
   var targetDir = ResolveDownloadDir(downloadDir);
   var logDir = Path.Combine(targetDir, "yt-dlp-logs");
   Directory.CreateDirectory(logDir);
@@ -83,7 +87,7 @@ static object StartDownload(JsonElement root, ConcurrentDictionary<string, Downl
   };
   tasks[id] = task;
 
-  var args = BuildYtDlpArgs(url, outputTemplate, task.Quality, task.PlaylistMode);
+  var args = BuildYtDlpArgs(url, outputTemplate, task.Quality, task.PlaylistMode, downloadSubs, subLangs, embedSubs);
   var psi = new ProcessStartInfo
   {
     FileName = ResolveYtDlpPath(),
@@ -386,7 +390,7 @@ static void HandleYtDlpLine(string? line, DownloadTask task, StreamWriter writer
   }
 }
 
-static string[] BuildYtDlpArgs(string url, string outputTemplate, string quality, string playlistMode)
+static string[] BuildYtDlpArgs(string url, string outputTemplate, string quality, string playlistMode, bool downloadSubs, string? subLangs, bool embedSubs)
 {
   var format = quality switch
   {
@@ -425,6 +429,22 @@ static string[] BuildYtDlpArgs(string url, string outputTemplate, string quality
     args.Add("-x");
     args.Add("--audio-format");
     args.Add("mp3");
+  }
+
+  if (downloadSubs)
+  {
+    args.Add("--write-subs");
+    args.Add("--write-auto-subs");
+    if (!string.IsNullOrWhiteSpace(subLangs))
+    {
+      args.Add("--sub-langs");
+      args.Add(subLangs);
+    }
+  }
+
+  if (embedSubs && quality != "audio")
+  {
+    args.Add("--embed-subs");
   }
 
   args.Add(url);
