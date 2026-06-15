@@ -38,6 +38,9 @@ while (true)
       case "cancel":
         WriteResponse(output, outputLock, WithRequestId(requestId, CancelDownload(root, tasks)));
         break;
+      case "openFolder":
+        WriteResponse(output, outputLock, WithRequestId(requestId, OpenFolder(root)));
+        break;
       default:
         WriteResponse(output, outputLock, WithRequestId(requestId, new { ok = false, error = "Unknown action." }));
         break;
@@ -300,6 +303,30 @@ static object CancelDownload(JsonElement root, ConcurrentDictionary<string, Down
   }
 }
 
+static object OpenFolder(JsonElement root)
+{
+  var path = root.TryGetProperty("path", out var pathProp) ? pathProp.GetString() : null;
+  if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(path))
+  {
+    return new { ok = false, error = "Directory not found." };
+  }
+
+  try
+  {
+    Process.Start(new ProcessStartInfo
+    {
+      FileName = path,
+      UseShellExecute = true,
+      Verb = "open"
+    });
+    return new { ok = true };
+  }
+  catch (Exception ex)
+  {
+    return new { ok = false, error = ex.Message };
+  }
+}
+
 static async Task PumpProcessAsync(Process process, DownloadTask task)
 {
   await using var logStream = new FileStream(task.LogFile, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
@@ -376,6 +403,8 @@ static string[] BuildYtDlpArgs(string url, string outputTemplate, string quality
     "--no-overwrites",
     "--newline",
     "--progress",
+    "--ffmpeg-location",
+    AppContext.BaseDirectory,
     "-f",
     format,
     "-o",

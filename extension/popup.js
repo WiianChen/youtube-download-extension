@@ -364,7 +364,8 @@ function renderTasks(tasks) {
         <div class="meta">${escapeHtml(qualityText(quality))}${speed ? ` · ${escapeHtml(speed)}` : ""}${eta ? ` · ETA ${escapeHtml(eta)}` : ""}</div>
         <div class="line">${escapeHtml(line)}</div>
         <div class="taskActions">
-          <button class="ghost small" data-cancel="${escapeHtml(id)}" ${canCancel ? "" : "disabled"}>取消</button>
+          ${canCancel ? `<button class="ghost small" data-cancel="${escapeHtml(id)}">取消</button>` : ""}
+          <button class="ghost small" data-open-folder="${escapeHtml(task.DownloadDir || task.downloadDir || "")}">開啟資料夾</button>
         </div>
       </article>
     `;
@@ -372,6 +373,10 @@ function renderTasks(tasks) {
 
   tasksList.querySelectorAll("[data-cancel]").forEach(button => {
     button.addEventListener("click", () => cancelTask(button.dataset.cancel));
+  });
+
+  tasksList.querySelectorAll("[data-open-folder]").forEach(button => {
+    button.addEventListener("click", () => sendNative({ action: "openFolder", path: button.dataset.openFolder }).catch(e => setStatus(`開啟資料夾失敗: ${e.message}`, "error")));
   });
 }
 
