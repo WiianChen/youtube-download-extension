@@ -1,4 +1,4 @@
-﻿const defaultDownloadDir = "%USERPROFILE%\\Desktop\\youtube videos";
+const defaultDownloadDir = "%USERPROFILE%\\Desktop\\youtube videos";
 const downloadDirStorageKey = "ytDlpDownloadDir";
 
 const urlInput = document.getElementById("url");
@@ -34,16 +34,16 @@ const previewVideos = [
   {
     id: "dQw4w9WgXcQ",
     url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-    title: "示例视频：准备下载",
-    uploader: "示例频道",
+    title: "範例影片：準備下載",
+    uploader: "範例頻道",
     duration: "3:33",
     index: 1
   },
   {
     id: "KpcaZCkYFv4",
     url: "https://www.youtube.com/watch?v=KpcaZCkYFv4",
-    title: "合集视频：可选 1080p 画质",
-    uploader: "示例频道",
+    title: "合集影片：可選 1080p 畫質",
+    uploader: "範例頻道",
     duration: "8:14",
     index: 2
   }
@@ -83,7 +83,7 @@ const previewAccount = {
   })),
   likedVideos: previewVideos,
   playlists: [
-    { id: "PLdemo", title: "收藏的教程合集", count: 18, thumbnail: "icons/icon-48.png" }
+    { id: "PLdemo", title: "收藏的教學合集", count: 18, thumbnail: "icons/icon-48.png" }
   ]
 };
 
@@ -164,24 +164,24 @@ function getDownloadDir() {
 async function resolveCurrentUrl() {
   const url = urlInput.value.trim();
   if (!isYouTubeUrl(url)) {
-    setStatus("这不是 YouTube 链接。", "error");
+    setStatus("這不是 YouTube 網址。", "error");
     return;
   }
 
   localStorage.setItem(downloadDirStorageKey, getDownloadDir());
   resolveButton.disabled = true;
-  setStatus("正在解析链接...", "busy");
+  setStatus("正在偵測網址...", "busy");
   renderVideos([]);
 
   try {
     const response = await sendNative({ action: "resolve", url });
     resolvedVideos = response.videos || [];
     renderVideos(resolvedVideos);
-    setStatus(`解析完成：找到 ${resolvedVideos.length} 个视频。`, "success");
+    setStatus(`偵測完成：找到 ${resolvedVideos.length} 個影片。`, "success");
   } catch (error) {
     resolvedVideos = [];
     renderVideos([]);
-    setStatus(`解析失败：${error.message}`, "error");
+    setStatus(`偵測失敗：${error.message}`, "error");
   } finally {
     resolveButton.disabled = false;
   }
@@ -191,13 +191,13 @@ async function downloadSelectedVideos() {
   const selected = getSelectedVideos();
   const downloadDir = getDownloadDir();
   if (!selected.length) {
-    setStatus("请先选择要下载的视频。", "error");
+    setStatus("請先選擇要下載的影片。", "error");
     return;
   }
 
   localStorage.setItem(downloadDirStorageKey, downloadDir);
   downloadSelectedButton.disabled = true;
-  setStatus(`正在加入 ${selected.length} 个下载任务...`, "busy");
+  setStatus(`正在加入 ${selected.length} 個下載任務...`, "busy");
 
   let successCount = 0;
   let lastError = "";
@@ -216,7 +216,7 @@ async function downloadSelectedVideos() {
     }
   }
 
-  setStatus(lastError ? `已加入 ${successCount} 个任务，部分失败：${lastError}` : `已加入 ${successCount} 个下载任务。`, lastError ? "error" : "success");
+  setStatus(lastError ? `已加入 ${successCount} 個任務，部分失敗：${lastError}` : `已加入 ${successCount} 個下載任務。`, lastError ? "error" : "success");
   downloadSelectedButton.disabled = false;
   await refreshTasks();
   setView("tasks");
@@ -232,7 +232,7 @@ async function refreshTasks() {
     const response = await sendNative({ action: "list" });
     renderTasks(response.tasks || []);
   } catch (error) {
-    tasksList.innerHTML = emptyState("无法读取任务", error.message, "error");
+    tasksList.innerHTML = emptyState("無法讀取任務", error.message, "error");
   }
 }
 
@@ -241,7 +241,7 @@ async function cancelTask(id) {
     await sendNative({ action: "cancel", id });
     await refreshTasks();
   } catch (error) {
-    setStatus(`取消失败：${error.message}`, "error");
+    setStatus(`取消失敗：${error.message}`, "error");
   }
 }
 
@@ -254,21 +254,21 @@ function startPolling() {
 
 async function loadAccountData() {
   if (!oauthConfigured && !previewMode) {
-    accountStatus.textContent = "账号功能暂未启用：发布者需要先在 manifest.json 配置 Google OAuth Client ID。下载功能不受影响。";
+    accountStatus.textContent = "帳號功能暫未啟用：開發者需要先在 manifest.json 配置 Google OAuth Client ID。下載功能不受影響。";
     renderAccount({});
     return;
   }
 
   loginAccountButton.disabled = true;
   loadAccountButton.disabled = true;
-  accountStatus.textContent = "正在读取 YouTube 账号数据...";
+  accountStatus.textContent = "正在讀取 YouTube 帳號資料...";
 
   try {
     const data = previewMode ? previewAccount : await sendAccount({ action: "load" });
     renderAccount(data);
-    accountStatus.textContent = "账号数据已读取。";
+    accountStatus.textContent = "帳號資料已讀取。";
   } catch (error) {
-    accountStatus.textContent = `读取失败：${error.message}`;
+    accountStatus.textContent = `讀取失敗：${error.message}`;
     renderAccount({});
   } finally {
     loginAccountButton.disabled = false;
@@ -281,10 +281,10 @@ async function logoutAccount() {
     if (!previewMode) {
       await sendAccount({ action: "logout" });
     }
-    accountStatus.textContent = "已退出授权。";
+    accountStatus.textContent = "已登出授權。";
     renderAccount({});
   } catch (error) {
-    accountStatus.textContent = `退出失败：${error.message}`;
+    accountStatus.textContent = `登出失敗：${error.message}`;
   }
 }
 
@@ -292,18 +292,18 @@ function renderVideos(videos) {
   selectAllInput.checked = false;
   selectAllInput.indeterminate = false;
   if (!videos.length) {
-    resolveSummary.textContent = "还没有解析视频。";
+    resolveSummary.textContent = "還沒有偵測影片。";
     resolveChips.innerHTML = "";
-    videoList.innerHTML = emptyState("等待解析", "粘贴 YouTube 视频或合集链接，然后点击解析。");
+    videoList.innerHTML = emptyState("等待偵測", "貼上 YouTube 影片或播放清單網址，然後點擊偵測。");
     updateSelectionState();
     return;
   }
 
-  resolveSummary.textContent = `共 ${videos.length} 个视频，可选择一个或多个下载。`;
+  resolveSummary.textContent = `共 ${videos.length} 個影片，可選擇一個或多個下載。`;
   resolveChips.innerHTML = `
-    <span>${videos.length} 个视频</span>
+    <span>${videos.length} 個影片</span>
     <span>${escapeHtml(qualityText(qualityInput.value))}</span>
-    <span>路径已设置</span>
+    <span>路徑已設定</span>
   `;
   videoList.innerHTML = videos.map((video, index) => `
     <label class="videoItem">
@@ -325,15 +325,15 @@ function renderVideos(videos) {
 function renderTasks(tasks) {
   if (!tasks.length) {
     taskSummary.innerHTML = "";
-    tasksList.innerHTML = emptyState("暂无下载任务", "解析视频后，选中的下载会显示在这里。");
+    tasksList.innerHTML = emptyState("暫無下載任務", "偵測影片後，選中的下載會顯示在這裡。");
     return;
   }
 
   const runningCount = tasks.filter(task => ["running", "starting"].includes(task.Status || task.status)).length;
   const doneCount = tasks.filter(task => (task.Status || task.status) === "done").length;
   taskSummary.innerHTML = `
-    <span>${tasks.length} 个任务</span>
-    <span>${runningCount} 个进行中</span>
+    <span>${tasks.length} 個任務</span>
+    <span>${runningCount} 個進行中</span>
     <span>${doneCount} 个已完成</span>
   `;
 
@@ -376,17 +376,17 @@ function renderAccount(data) {
         ${channel.thumbnail ? `<img src="${escapeHtml(channel.thumbnail)}" alt="">` : ""}
         <div>
           <strong>${escapeHtml(channel.title)}</strong>
-          <span>已连接 YouTube 账号</span>
+          <span>已連接 YouTube 帳號</span>
         </div>
       </div>
     `;
   } else {
-    accountSummary.innerHTML = emptyState("未连接账号", "登录后可以读取播放列表、喜欢视频和最近浏览。");
+    accountSummary.innerHTML = emptyState("未連接帳號", "登入後可以讀取播放清單、喜歡的影片和最近瀏覽。");
   }
 
   renderLinkList(recentList, data.recentHistory || [], item => ({
     title: item.title,
-    subtitle: item.lastVisitTime ? `最近访问：${new Date(item.lastVisitTime).toLocaleString()}` : item.url,
+    subtitle: item.lastVisitTime ? `最近瀏覽：${new Date(item.lastVisitTime).toLocaleString()}` : item.url,
     url: item.url
   }));
   renderLinkList(likedList, data.likedVideos || [], item => ({
@@ -396,14 +396,14 @@ function renderAccount(data) {
   }));
   renderLinkList(playlistList, data.playlists || [], item => ({
     title: item.title,
-    subtitle: `${item.count || 0} 个视频`,
+    subtitle: `${item.count || 0} 個影片`,
     url: `https://www.youtube.com/playlist?list=${item.id}`
   }));
 }
 
 function renderLinkList(container, items, mapItem) {
   if (!items.length) {
-    container.innerHTML = emptyState("暂无内容", "登录或刷新后，这里会显示可解析的 YouTube 项目。");
+    container.innerHTML = emptyState("暫無內容", "登入或重新整理後，這裡會顯示可偵測的 YouTube 項目。");
     return;
   }
 
@@ -416,7 +416,7 @@ function renderLinkList(container, items, mapItem) {
           <strong>${escapeHtml(mapped.title || mapped.url)}</strong>
           <span>${escapeHtml(mapped.subtitle || "")}</span>
         </div>
-        <button class="ghost small" data-use-url="${escapeHtml(mapped.url)}">解析</button>
+        <button class="ghost small" data-use-url="${escapeHtml(mapped.url)}">偵測</button>
       </article>
     `;
   }).join("");
@@ -425,7 +425,7 @@ function renderLinkList(container, items, mapItem) {
     button.addEventListener("click", () => {
       urlInput.value = button.dataset.useUrl;
       setView("resolve");
-      setStatus("已填入链接，可以开始解析。", "success");
+      setStatus("已填入網址，可以開始偵測。", "success");
     });
   });
 }
@@ -434,7 +434,7 @@ function updateSelectionState() {
   const checkboxes = [...videoList.querySelectorAll("input[type='checkbox']")];
   const selectedCount = checkboxes.filter(input => input.checked).length;
   downloadSelectedButton.disabled = selectedCount === 0;
-  downloadSelectedButton.textContent = selectedCount ? `下载选中视频（${selectedCount}）` : "下载选中视频";
+  downloadSelectedButton.textContent = selectedCount ? `下載選中的影片（${selectedCount}）` : "下載選中的影片";
   selectAllInput.disabled = checkboxes.length === 0;
   selectAllInput.checked = checkboxes.length > 0 && selectedCount === checkboxes.length;
   selectAllInput.indeterminate = selectedCount > 0 && selectedCount < checkboxes.length;
@@ -460,21 +460,21 @@ function getSelectedVideos() {
 
 function statusTextFor(status) {
   return {
-    starting: "启动中",
-    running: "下载中",
+    starting: "啟動中",
+    running: "下載中",
     done: "已完成",
-    error: "失败",
+    error: "失敗",
     canceled: "已取消"
   }[status] || status;
 }
 
 function qualityText(value) {
   return {
-    "best-mp4": "最佳单文件 MP4",
+    "best-mp4": "最佳單一檔案 MP4",
     "1080": "最高 1080p",
     "720": "最高 720p",
     "480": "最高 480p",
-    audio: "仅音频 MP3"
+    audio: "僅音訊 MP3"
   }[value] || value;
 }
 
@@ -492,7 +492,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   versionText.textContent = `v${manifest?.version || "0.2.0"}`;
   oauthConfigured = !manifest?.oauth2?.client_id?.startsWith("REPLACE_WITH_");
   if (!oauthConfigured && !previewMode) {
-    accountStatus.textContent = "账号功能是可选项：配置 Google OAuth Client ID 后可读取 YouTube 收藏和播放列表。";
+    accountStatus.textContent = "帳號功能是可選項：配置 Google OAuth Client ID 後可讀取 YouTube 收藏和播放清單。";
   }
 
   const savedDir = localStorage.getItem(downloadDirStorageKey);
@@ -504,14 +504,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderVideos(previewMode === "tasks" ? [] : previewVideos);
     renderTasks(previewMode === "tasks" ? previewTasks : []);
     renderAccount(previewMode === "account" ? previewAccount : {});
-    setStatus("准备好了。", "success");
+    setStatus("準備就緒。", "success");
     setView(["tasks", "account"].includes(previewMode) ? previewMode : "resolve");
     return;
   }
 
   const currentUrl = await getActiveTabUrl();
   urlInput.value = currentUrl;
-  setStatus(isYouTubeUrl(currentUrl) ? "准备好了。" : "请打开一个 YouTube 视频页。");
+  setStatus(isYouTubeUrl(currentUrl) ? "準備就緒。" : "請開啟一個 YouTube 影片頁面。");
   renderVideos([]);
   await refreshTasks();
 });

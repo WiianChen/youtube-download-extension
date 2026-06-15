@@ -1,9 +1,9 @@
-﻿<!doctype html>
-<html lang="zh-CN">
+<!doctype html>
+<html lang="zh-TW">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>YouTube 下载助手 · yt-dlp</title>
+    <title>YouTube 下載小幫手 · yt-dlp</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -15,14 +15,14 @@
             <h1>YouTube</h1>
             <span id="version" class="version">v0.2.1</span>
           </div>
-          <p>下载助手 · 本地 yt-dlp</p>
+          <p>下載小幫手 · 本機 yt-dlp</p>
         </div>
       </header>
 
-      <nav class="tabs" aria-label="页面" role="tablist">
-        <button id="resolveTab" class="tab active" type="button" role="tab" aria-selected="true" aria-controls="resolveView" tabindex="0" data-view="resolve"><span class="tabIcon resolveIcon" aria-hidden="true"></span>视频检测</button>
-        <button id="tasksTab" class="tab" type="button" role="tab" aria-selected="false" aria-controls="tasksView" tabindex="-1" data-view="tasks"><span class="tabIcon tasksIcon" aria-hidden="true"></span>下载任务</button>
-        <button id="accountTab" class="tab" type="button" role="tab" aria-selected="false" aria-controls="accountView" tabindex="-1" data-view="account"><span class="tabIcon accountIcon" aria-hidden="true"></span>账号</button>
+      <nav class="tabs" aria-label="頁面" role="tablist">
+        <button id="resolveTab" class="tab active" type="button" role="tab" aria-selected="true" aria-controls="resolveView" tabindex="0" data-view="resolve"><span class="tabIcon resolveIcon" aria-hidden="true"></span>偵測影片</button>
+        <button id="tasksTab" class="tab" type="button" role="tab" aria-selected="false" aria-controls="tasksView" tabindex="-1" data-view="tasks"><span class="tabIcon tasksIcon" aria-hidden="true"></span>下載任務</button>
+        <button id="accountTab" class="tab" type="button" role="tab" aria-selected="false" aria-controls="accountView" tabindex="-1" data-view="account"><span class="tabIcon accountIcon" aria-hidden="true"></span>帳號</button>
       </nav>
 
       <section id="resolveView" class="view active" role="tabpanel" aria-labelledby="resolveTab">
@@ -30,28 +30,28 @@
           <div class="panelBlock">
             <div class="blockHead">
               <div>
-                <strong>检测视频</strong>
-                <p>粘贴链接，或直接读取当前打开的 YouTube 页面。</p>
+                <strong>偵測影片</strong>
+                <p>貼上網址，或直接讀取目前開啟的 YouTube 頁面。</p>
               </div>
             </div>
             <div class="sourceActions">
-              <button id="useCurrentPage" type="button" class="ghost actionChip">当前页面</button>
+              <button id="useCurrentPage" type="button" class="ghost actionChip">目前分頁</button>
               <button id="clearUrl" type="button" class="ghost actionChip">清空</button>
             </div>
           </div>
 
           <div class="fieldRow">
-            <label for="url">YouTube 链接</label>
-            <input id="url" type="text" spellcheck="false" aria-describedby="urlHint" placeholder="粘贴 YouTube 视频或播放列表链接">
-            <p id="urlHint" class="fieldHint" aria-live="polite">支持视频、合集和 youtu.be 短链接。</p>
+            <label for="url">YouTube 網址</label>
+            <input id="url" type="text" spellcheck="false" aria-describedby="urlHint" placeholder="貼上 YouTube 影片或播放清單網址">
+            <p id="urlHint" class="fieldHint" aria-live="polite">支援影片、播放清單和 youtu.be 短網址。</p>
           </div>
 
           <div class="fieldRow">
             <div class="labelRow">
-              <label for="quality">画质</label>
-              <span class="inlineHint">下载格式</span>
+              <label for="quality">畫質</label>
+              <span class="inlineHint">下載格式</span>
             </div>
-            <div id="qualityPresets" class="qualityPresets" aria-label="画质预设">
+            <div id="qualityPresets" class="qualityPresets" aria-label="畫質預設">
               <button type="button" class="qualityChip active" data-quality="best-mp4" aria-pressed="true">最佳 MP4</button>
               <button type="button" class="qualityChip" data-quality="1080" aria-pressed="false">1080p HD</button>
               <button type="button" class="qualityChip" data-quality="720" aria-pressed="false">720p</button>
@@ -59,48 +59,48 @@
               <button type="button" class="qualityChip" data-quality="audio" aria-pressed="false">MP3</button>
             </div>
             <select id="quality" class="qualitySelect">
-              <option value="best-mp4">最佳单文件 MP4</option>
+              <option value="best-mp4">最佳單一檔案 MP4</option>
               <option value="1080">最高 1080p</option>
               <option value="720">最高 720p</option>
               <option value="480">最高 480p</option>
-              <option value="audio">仅音频 MP3</option>
+              <option value="audio">僅音訊 MP3</option>
             </select>
-            <p class="fieldHint">优先保存为兼容性更好的 MP4；音频可单独保存为 MP3。</p>
+            <p class="fieldHint">優先儲存為相容性更好的 MP4；音訊可單獨儲存為 MP3。</p>
           </div>
 
           <details class="advancedSettings">
-            <summary>更多选项</summary>
+            <summary>更多選項</summary>
             <div class="fieldRow compact">
-              <label for="downloadDir">下载路径</label>
+              <label for="downloadDir">下載路徑</label>
               <input id="downloadDir" type="text" spellcheck="false">
             </div>
             <label class="toggleRow" for="useBrowserCookies">
               <span>
-                <strong>使用浏览器登录状态</strong>
-                <small>仅在 YouTube 要求确认登录时开启。</small>
+                <strong>使用瀏覽器登入狀態</strong>
+                <small>僅在 YouTube 要求確認登入時開啟。</small>
               </span>
               <input id="useBrowserCookies" type="checkbox">
             </label>
           </details>
         </section>
 
-        <button id="resolve" type="button" disabled>检测视频</button>
-        <p id="status" role="status" aria-live="polite" aria-atomic="true">正在读取当前标签页...</p>
+        <button id="resolve" type="button" disabled>偵測影片</button>
+        <p id="status" role="status" aria-live="polite" aria-atomic="true">正在讀取目前分頁...</p>
 
         <section class="selection">
           <div class="sectionHead">
             <div>
-              <h2>检测结果</h2>
-              <p id="resolveSummary">还没有检测视频。检测后可选择要下载的视频。</p>
+              <h2>偵測結果</h2>
+              <p id="resolveSummary">還沒有偵測影片。偵測後可選擇要下載的影片。</p>
               <div id="resolveChips" class="summaryChips"></div>
             </div>
             <div class="selectionTools">
-              <p id="selectionMeta" class="selectionMeta">未选择视频</p>
-              <label class="selectAll"><input id="selectAll" type="checkbox"> 全选</label>
+              <p id="selectionMeta" class="selectionMeta">未選擇影片</p>
+              <label class="selectAll"><input id="selectAll" type="checkbox"> 全選</label>
             </div>
           </div>
           <div class="actionDock">
-            <button id="downloadSelected" type="button" disabled>添加到下载</button>
+            <button id="downloadSelected" type="button" disabled>新增到下載</button>
           </div>
           <div id="videoList" class="videoList"></div>
         </section>
@@ -110,14 +110,14 @@
         <section class="tasks">
           <div class="tasksHead">
             <div>
-              <h2>下载任务</h2>
-              <p>查看进度、速度和最近输出。</p>
+              <h2>下載任務</h2>
+              <p>查看進度、速度和最近輸出。</p>
             </div>
-            <button id="refresh" type="button" class="ghost">刷新</button>
+            <button id="refresh" type="button" class="ghost">重新整理</button>
           </div>
-          <div id="taskSummary" class="summaryChips taskSummary" aria-label="任务摘要"></div>
-          <section id="taskOverview" class="taskOverview" aria-label="任务总览"></section>
-          <div id="tasksList" class="tasksList" role="list" aria-label="下载任务列表"></div>
+          <div id="taskSummary" class="summaryChips taskSummary" aria-label="任務摘要"></div>
+          <section id="taskOverview" class="taskOverview" aria-label="任務總覽"></section>
+          <div id="tasksList" class="tasksList" role="list" aria-label="下載任務清單"></div>
         </section>
       </section>
 
@@ -125,15 +125,15 @@
         <section class="accountPanel">
           <div class="sectionHead">
             <div>
-              <h2>YouTube 账号</h2>
-              <p id="accountStatus" role="status" aria-live="polite" aria-atomic="true">可选功能：读取播放列表、喜欢视频和本机最近浏览。</p>
+              <h2>YouTube 帳號</h2>
+              <p id="accountStatus" role="status" aria-live="polite" aria-atomic="true">可選功能：讀取播放清單、喜歡的影片和本機最近瀏覽。</p>
             </div>
-            <button id="logoutAccount" type="button" class="ghost" hidden>退出</button>
+            <button id="logoutAccount" type="button" class="ghost" hidden>登出</button>
           </div>
-          <button id="loginAccount" type="button" class="secondary">登录 YouTube</button>
+          <button id="loginAccount" type="button" class="secondary">登入 YouTube</button>
           <div class="noticeBar">
             <span class="noticeIcon" aria-hidden="true"></span>
-            <p>账号授权是可选功能；检测和下载不需要登录。</p>
+            <p>帳號授權是可選功能；偵測和下載不需要登入。</p>
           </div>
           <div id="accountSummary" class="accountSummary"></div>
         </section>
@@ -141,32 +141,32 @@
         <section class="accountList">
           <div class="sectionHead">
             <div>
-              <h2>最近浏览</h2>
-              <p class="sectionSubtext">从浏览器历史中读取最近打开过的 YouTube 内容。</p>
+              <h2>最近瀏覽</h2>
+              <p class="sectionSubtext">從瀏覽器紀錄中讀取最近開啟過的 YouTube 內容。</p>
             </div>
-            <button id="loadAccount" type="button" class="ghost">刷新</button>
+            <button id="loadAccount" type="button" class="ghost">重新整理</button>
           </div>
-          <div id="recentList" class="compactList" role="list" aria-label="最近浏览列表"></div>
+          <div id="recentList" class="compactList" role="list" aria-label="最近瀏覽清單"></div>
         </section>
 
         <section class="accountList">
           <div class="sectionHead">
             <div>
-              <h2>喜欢的视频</h2>
-              <p class="sectionSubtext">已授权时，这里会显示可快速送去检测的喜欢内容。</p>
+              <h2>喜歡的影片</h2>
+              <p class="sectionSubtext">已授權時，這裡會顯示可快速送去偵測的喜歡內容。</p>
             </div>
           </div>
-          <div id="likedList" class="compactList" role="list" aria-label="喜欢的视频列表"></div>
+          <div id="likedList" class="compactList" role="list" aria-label="喜歡的影片清單"></div>
         </section>
 
         <section class="accountList">
           <div class="sectionHead">
             <div>
-              <h2>播放列表 / 收藏</h2>
-              <p class="sectionSubtext">适合把教程合集、收藏夹和稍后再看内容直接送去检测。</p>
+              <h2>播放清單 / 收藏</h2>
+              <p class="sectionSubtext">適合把教學合集、收藏夾和稍後觀看內容直接送去偵測。</p>
             </div>
           </div>
-          <div id="playlistList" class="compactList" role="list" aria-label="播放列表和收藏列表"></div>
+          <div id="playlistList" class="compactList" role="list" aria-label="播放清單和收藏清單"></div>
         </section>
       </section>
     </main>

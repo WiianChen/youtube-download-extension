@@ -24,7 +24,7 @@
     "128": "icons/icon-128.png"
   },
   "action": {
-    "default_title": "Download with yt-dlp",
+    "default_title": "使用 yt-dlp 下載",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon-16.png",
