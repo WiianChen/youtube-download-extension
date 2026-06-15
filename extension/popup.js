@@ -1,4 +1,4 @@
-const defaultDownloadDir = "%USERPROFILE%\\Desktop\\youtube videos";
+const defaultDownloadDir = "C:\\download";
 const downloadDirStorageKey = "ytDlpDownloadDir";
 
 const urlInput = document.getElementById("url");
@@ -547,6 +547,27 @@ clearUrlButton.addEventListener("click", () => {
   resolveButton.disabled = true;
   urlInput.focus();
   setStatus("網址已清空。");
+});
+
+const qualityChips = document.querySelectorAll(".qualityChip");
+qualityChips.forEach(chip => {
+  chip.addEventListener("click", () => {
+    qualityChips.forEach(c => {
+      c.classList.remove("active");
+      c.setAttribute("aria-pressed", "false");
+    });
+    chip.classList.add("active");
+    chip.setAttribute("aria-pressed", "true");
+    qualityInput.value = chip.dataset.quality;
+  });
+});
+
+qualityInput.addEventListener("change", () => {
+  qualityChips.forEach(c => {
+    const isActive = c.dataset.quality === qualityInput.value;
+    c.classList.toggle("active", isActive);
+    c.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
 });
 
 resolveButton.addEventListener("click", resolveCurrentUrl);
