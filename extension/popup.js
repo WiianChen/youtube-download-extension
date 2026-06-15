@@ -23,6 +23,8 @@ const accountSummary = document.getElementById("accountSummary");
 const recentList = document.getElementById("recentList");
 const likedList = document.getElementById("likedList");
 const playlistList = document.getElementById("playlistList");
+const useCurrentPageButton = document.getElementById("useCurrentPage");
+const clearUrlButton = document.getElementById("clearUrl");
 const views = {
   resolve: document.getElementById("resolveView"),
   tasks: document.getElementById("tasksView"),
@@ -100,6 +102,11 @@ function setStatus(message, state = "") {
 function setView(name) {
   for (const [viewName, element] of Object.entries(views)) {
     element.classList.toggle("active", viewName === name);
+    if (viewName === name) {
+      element.removeAttribute("hidden");
+    } else {
+      element.setAttribute("hidden", "hidden");
+    }
   }
   tabs.forEach(tab => tab.classList.toggle("active", tab.dataset.view === name));
   if (name === "tasks") {
@@ -511,6 +518,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const currentUrl = await getActiveTabUrl();
   urlInput.value = currentUrl;
+  resolveButton.disabled = !currentUrl.trim();
   setStatus(isYouTubeUrl(currentUrl) ? "準備就緒。" : "請開啟一個 YouTube 影片頁面。");
   renderVideos([]);
   await refreshTasks();
@@ -523,6 +531,24 @@ selectAllInput.addEventListener("change", () => {
   });
   updateSelectionState();
 });
+
+urlInput.addEventListener("input", () => {
+  resolveButton.disabled = !urlInput.value.trim();
+});
+
+useCurrentPageButton.addEventListener("click", async () => {
+  urlInput.value = await getActiveTabUrl();
+  resolveButton.disabled = !urlInput.value.trim();
+  setStatus(isYouTubeUrl(urlInput.value) ? "已讀取目前分頁。" : "請開啟一個 YouTube 影片頁面。");
+});
+
+clearUrlButton.addEventListener("click", () => {
+  urlInput.value = "";
+  resolveButton.disabled = true;
+  urlInput.focus();
+  setStatus("網址已清空。");
+});
+
 resolveButton.addEventListener("click", resolveCurrentUrl);
 downloadSelectedButton.addEventListener("click", downloadSelectedVideos);
 refreshButton.addEventListener("click", refreshTasks);
